@@ -29,10 +29,10 @@ namespace MusicProAPIREST.Services
                 while (reader.Read())
                 {
                     Tarjeta tarjeta = new Tarjeta();
-                    tarjeta.idTarjeta = reader.GetInt32(0);
-                    tarjeta.cardNumber = reader.GetString(1);
-                    tarjeta.Nombre = reader.GetString(2);
-                    tarjeta.Saldo = reader.GetInt32(3);
+                    tarjeta.idTarjeta = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
+                    tarjeta.cardNumber = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
+                    tarjeta.Nombre = reader.IsDBNull(2) ? string.Empty : reader.GetString(2);
+                    tarjeta.Saldo = reader.IsDBNull(3) ? 0 : reader.GetInt32(3);
 
                     lista.Add(tarjeta);
                 }
@@ -48,7 +48,7 @@ namespace MusicProAPIREST.Services
             conn.Open();
 
             var command = new SqlCommand(
-                "Select * from tarjeta where id = " + id, conn
+                "Select * from tarjeta where id = "+ id, conn
                 );
 
             using SqlDataReader reader = command.ExecuteReader();
@@ -56,10 +56,10 @@ namespace MusicProAPIREST.Services
             {
                 while (reader.Read())
                 {
-                    tarjeta.idTarjeta = reader.GetInt32(0);
-                    tarjeta.cardNumber = reader.GetString(1);
-                    tarjeta.Nombre = reader.GetString(2);
-                    tarjeta.Saldo = reader.GetInt32(3);
+                    tarjeta.idTarjeta = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
+                    tarjeta.cardNumber = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
+                    tarjeta.Nombre = reader.IsDBNull(2) ? string.Empty : reader.GetString(2);
+                    tarjeta.Saldo = reader.IsDBNull(3) ? 0 : reader.GetInt32(3);
                 }
 
                 return tarjeta;
@@ -183,6 +183,7 @@ namespace MusicProAPIREST.Services
                                     updateCommand.Parameters.AddWithValue("@Saldo", saldo);
                                     updateCommand.Parameters.AddWithValue("@CardNumber", cardNumber);
                                     updateCommand.ExecuteNonQuery();
+                                    conn.Close();
                                 }
                                 else
                                 {
